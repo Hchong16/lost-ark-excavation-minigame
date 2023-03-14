@@ -15,15 +15,12 @@ def automate_space() -> None:
     keyUp('space')
 
 def search_targets() -> list:
-    bar = screenshot("b.png", region=(725, 720, 450, 20))
+    bar = screenshot(region=(725, 720, 450, 20))
     bar_rgb = np.array(bar)
     bar_gray = cv2.cvtColor(bar_rgb, cv2.COLOR_BGR2GRAY)
 
     ret, bar_bw = cv2.threshold(bar_gray, 95, 255, cv2.THRESH_BINARY)
     contours, _ = cv2.findContours(bar_bw, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-    # plt.subplot(121),plt.imshow(bar_bw, cmap = 'gray')
-    # plt.show()
 
     targets = []
     for target in contours:
