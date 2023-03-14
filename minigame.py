@@ -5,9 +5,9 @@ from time import sleep
 import numpy as np
 import cv2 as cv2
 
-normal_spacebar = cv2.imread("./asset/normal_spacebar.png", 0)
-glow_spacebar = cv2.imread("./asset/glow_spacebar.png", 0)
-minigame_arrow = cv2.imread("./asset/minigame_arrow.png", 0)
+normal_spacebar = cv2.imread("./assets/normal_spacebar.png", 0)
+glow_spacebar = cv2.imread("./assets/glow_spacebar.png", 0)
+minigame_arrow = cv2.imread("./assets/minigame_arrow.png", 0)
 
 def automate_space() -> None:
     keyDown('space')
@@ -36,11 +36,11 @@ def search_targets() -> list:
 counter = 3
 targets = []
 skip_first = True
-while is_pressed('q') == False:
+while is_pressed('=') == False:
     # To optimize speed, extract specific parts of the screen. The following
     # assumes the program is on a 1080p + fullscreen application. 
 
-    # Must have minigame difficulty 2+ decreased shovel.
+    # Tested with minigame difficulty 2+ decreased shovel.
     im = screenshot(region=(880, 775, 150, 90))
     img_rgb = np.array(im)
     img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
@@ -53,7 +53,7 @@ while is_pressed('q') == False:
 
     if n_confidence >= 0.8 or g_confidence >= 0.8: 
         if not targets and skip_first:
-            sleep(1)
+            sleep(4)
 
         game = screenshot(region=(725, 740, 450, 30))
         game_rgb = np.array(game)
@@ -61,19 +61,20 @@ while is_pressed('q') == False:
 
         if not targets:
             targets = search_targets()
+            sleep(4)
 
         arrow_res = cv2.matchTemplate(game_gray, minigame_arrow, cv2.TM_CCOEFF_NORMED)
         _, arrow_confidence, _, arrow_loc = cv2.minMaxLoc(arrow_res)
         if arrow_confidence >= 0.8:
             # Offset middle of arrow to trigger spacebar early. This is to account for delays.
-            middle = arrow_loc[0] + 15
+            middle = arrow_loc[0] + 16
             for idx, target in enumerate(targets):
                 if middle <= target[1] and middle >= target[0] and counter > 0:
                     targets.remove(targets[idx])
                     automate_space()
                     counter -= 1
-                    print("IN RANGE OF: {} ({})".format(target, middle))
-                    print("PRESSING SPACE")
+                    # print("IN RANGE OF: {} ({})".format(target, middle))
+                    # print("PRESSING SPACE")
     else:
         counter = 3
         targets = []
