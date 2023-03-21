@@ -17,9 +17,17 @@ Once completed, run the following commands in the terminal below:
 2. Activate the virtual environment: ```./venv/Scripts/activate```
 3. Install python dependencies: ```pip3 install -r requirements.txt```
 
-You can now run the tool by running: ```python minigame.py```
+You can now run the tool by running: ```python minigame.py```.
+
+The program can be left on while excavating. It is smart enough to detect when the game has started.
 
 To quit the tool, press the `=` key or `CTRL + C` in the terminal.
+
+# Result
+A minigame shovel with 2 difficulty reduction has yielded the following results:  
+Of 45 out of 50 games, all 3 targets were hit. For the remaining 5, a minimum of 2 targets were hit.
+
+Users may need to configure offset values on the target ranges and the middle point on the game arrow to reach similar results.
 
 # WARNING
 This is not endorsed by Smilegate or AGS. Usage of this tool isn't defined by Smilegate or AGS. No personal identifiable data is saved.
