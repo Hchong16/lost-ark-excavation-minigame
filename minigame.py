@@ -1,21 +1,39 @@
 import cv2 as cv2
 import mss as mss
 import numpy as np
+from configparser import ConfigParser
 from keyboard import is_pressed
 from matplotlib import pyplot  as plt
 from pyautogui import keyUp, keyDown
 from time import sleep
 
+config = ConfigParser()
+config.read('config.ini')
+
+starting_delay_seconds = float(config["DEFAULT"]['starting_delay_seconds'])
+arrow_middle_offset = float(config["DEFAULT"]['arrow_middle_offset'])
+target_range_left_offset = float(config["DEFAULT"]['target_range_left_offset'])
+target_range_right_offset = float(config["DEFAULT"]['target_range_right_offset'])
+
 MINIGAME_ARROW = cv2.imread("./assets/minigame_arrow.png", 0)
 NORMAL_SACEBAR = cv2.imread("./assets/normal_spacebar.png", 0)
 GLOW_SPACEBAR = cv2.imread("./assets/glow_spacebar.png", 0)
+
+print("""
+██      ██████  ███████ ████████      █████  ██████  ██   ██ 
+██     ██    ██ ██         ██        ██   ██ ██   ██ ██  ██  
+██     ██    ██ ███████    ██        ███████ ██████  █████   
+██     ██    ██      ██    ██        ██   ██ ██   ██ ██  ██  
+███████ ██████  ███████    ██        ██   ██ ██   ██ ██   ██                                                                                                                                                
+""")
+print("Program has started... looking for excavation minigames. Press the '=' key to quit anytime!")
 
 def automate_space() -> None:
     keyDown('space')
     sleep(0.1)
     keyUp('space')
 
-def search_targets(offset = 4) -> list:
+def search_targets() -> list:
     """
     Search for the target zones within the excavation bar by returning the x-ranges
     for each individual zones. Add offsets to account for latency between the program and
@@ -32,8 +50,12 @@ def search_targets(offset = 4) -> list:
         if cv2.contourArea(target) >= 100:
             M = cv2.moments(target)
             x = int(M['m10']/M['m00'])
-            targets.append([x-offset, x+offset])
-
+            targets.append(
+                [
+                    x-target_range_left_offset, 
+                    x+target_range_right_offset
+                ]
+            )
     return targets
 
 targets = []
@@ -53,7 +75,7 @@ while is_pressed('=') == False:
         if n_confidence >= 0.8 or g_confidence >= 0.8:
             # Let the game load before we do anything
             if not targets:
-                sleep(4.5)
+                sleep(starting_delay_seconds)
 
             arrow_rgb = np.array(sct.grab({"left": 725, "top": 740, "width": 450, "height": 30}))
             arrow_gray = cv2.cvtColor(arrow_rgb, cv2.COLOR_BGR2GRAY)
@@ -66,12 +88,11 @@ while is_pressed('=') == False:
             _, arrow_confidence, _, arrow_loc = cv2.minMaxLoc(arrow_res)
             if arrow_confidence >= 0.75:
                 # Offset to the middle of arrow coordinate.
-                location = arrow_loc[0] + 14
+                location = arrow_loc[0] + arrow_middle_offset
                 for idx, target in enumerate(targets):
                     if location <= target[1] and location >= target[0]:
                         targets.remove(targets[idx])
                         automate_space()
-                        print("IN RANGE OF: {} ({})".format(target, location))
                         print("PRESSING SPACE\n")
         else:
             targets = []
