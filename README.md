@@ -12,7 +12,7 @@ Your mileage may vary.
 
 Before starting the exectuable, four values may need to be changed in the `config.ini`:
 
-`starting_delay_seconds` is the time before the program starts tapping the targets. Typically, longer will allow the program to "settle" and hit targets more accuratly.
+`starting_delay_seconds` is the time before the program starts tapping the targets. Typically, longer delay will allow the program to "settle" and hit targets more accurately.
 
 When we locate the arrow, the program will find the starting position of the arrow on the x-axis. The `arrow_middle_offset` will adjust the defined middle point of the arrow.
 ```
@@ -45,7 +45,9 @@ r = right offset
 
 These offsets are to account for delays between the program and the game. A 0 offset means there are no latency at all. If the program hits the spacebar too late, shifting the arrow middle (increasing `arrow_middle_offset`) and/or expanding the target ranges will alleviate the latency.
 
-To run the program, simply use the `minigame.exe`. To quit the tool, press the `=` key or `CTRL + C` in the terminal. 
+To run the program, simply use the `minigame.exe`. To quit the tool, press the `=` key or `CTRL + C` in the terminal.
+
+Restarting the program is required for changes made in the configuration file to take effect.
 
 # Development Setup
 Pre-requisite is to have Python 3.11.0+ installed using the installation [here](https://www.python.org/downloads/).
