@@ -10,7 +10,7 @@ Your mileage may vary.
 # User Setup
 **This tool only works when Lost Ark is running on 1080p + Fullscreen + 80% HUD size. You must configure offset values to work with your PC.**
 
-Before starting the exectuable, four values may need to be changed in the `config.yaml`:
+Before starting the exectuable, four values may need to be changed in the `config.ini`:
 
 `starting_delay_seconds` is the time before the program starts tapping the targets. Typically, longer will allow the program to "settle" and hit targets more accuratly.
 
