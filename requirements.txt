@@ -1,5 +1,6 @@
 pyautogui==0.9.53
+pyinstaller==5.9.0
 matplotlib==3.7.1
 keyboard==0.13.5
-opencv-python==4.7.72
+opencv-python==4.7.0.72
 mss==7.0.1
